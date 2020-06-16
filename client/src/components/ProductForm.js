@@ -4,15 +4,25 @@ import Axios from "axios";
 
 class ProductsForm extends React.Component {
   defaultValues = { name: "", price: "", description: "", department: "" };
-  state = { ...this.defaultValues };
+  state = this.props.product
+    ? { ...this.props.product }
+    : { ...this.defaultValues };
 
   handleSubmit = (e) => {
     e.preventDefault();
     const product = { ...this.state };
     // TODO: make api POST request
-    Axios.post("/api/products", { product: product }).then((res) => {
-      this.props.add(res.data);
-    });
+    if (!product.id) {
+      Axios.post("/api/products", { product: product }).then((res) => {
+        this.props.add(res.data);
+      });
+    } else {
+      Axios.put(`/api/products/${product.id}`, { product: product }).then(
+        (res) => {
+          this.props.update(res.data);
+        }
+      );
+    }
     this.setState({ ...this.defaultValues });
   };
 

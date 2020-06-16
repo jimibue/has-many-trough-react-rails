@@ -6,7 +6,7 @@ class Api::ProductsController < ApplicationController
   end
 
   def show
-    render json: @product
+    render json: { product: @product, reviews: @product.reviews, yo: "yo" }
   end
 
   def create
